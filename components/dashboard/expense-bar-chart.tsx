@@ -115,11 +115,6 @@ export function ExpenseBarChart({ expenses, loading = false }: ExpenseBarChartPr
                 formatter={(value) => (
                   <span className="text-xs text-slate-300">{String(value)}</span>
                 )}
-                payload={data.map((entry) => ({
-                  value: formatMonthLabel(entry.month),
-                  type: "square",
-                  color: entry.fill,
-                }))}
               />
               <Bar dataKey="total" name="Spending" radius={[6, 6, 0, 0]} minPointSize={3}>
                 {data.map((entry) => (
