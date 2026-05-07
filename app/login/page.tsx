@@ -1,9 +1,9 @@
+// Prevent static generation
+export const dynamic = 'force-dynamic';
+
 "use client";
 
 import Link from "next/link";
-
-// Prevent static generation
-export const dynamic = 'force-dynamic';
 import { FormEvent, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { signInWithEmailAndPassword } from "firebase/auth";
