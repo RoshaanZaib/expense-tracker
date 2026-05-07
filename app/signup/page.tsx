@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+export const dynamic = 'force-dynamic';
 import { FormEvent, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { createUserWithEmailAndPassword } from "firebase/auth";
