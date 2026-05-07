@@ -43,7 +43,7 @@ export function ExpensePieChart({ expenses, loading = false }: ExpensePieChartPr
                 ))}
               </Pie>
               <Tooltip
-                formatter={(value: number | string) => formatCurrency(Number(value))}
+                formatter={(value: any) => value ? formatCurrency(Number(Array.isArray(value) ? value[0] : value)) : ''}
                 contentStyle={{ backgroundColor: "#0f172a", border: "1px solid #334155", borderRadius: "8px" }}
               />
               <Legend wrapperStyle={{ color: "#cbd5e1", fontSize: "12px" }} />
