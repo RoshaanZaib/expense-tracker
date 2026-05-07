@@ -1,7 +1,7 @@
 // Prevent static generation
-export const dynamic = 'force-dynamic';
-
 "use client";
+
+export const dynamic = 'force-dynamic';
 
 import Link from "next/link";
 import { FormEvent, useEffect, useState } from "react";
