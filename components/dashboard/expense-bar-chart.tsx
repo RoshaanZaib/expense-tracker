@@ -104,7 +104,7 @@ export function ExpenseBarChart({ expenses, loading = false }: ExpenseBarChartPr
                   const date = new Date(Number(year), Number(month) - 1, 1)
                   return date.toLocaleString("en-US", { month: "long", year: "numeric" })
                 }}
-                formatter={(value: number | string | undefined, name?: string | number | undefined) => value ? formatCurrency(Number(value)) : ''}
+                formatter={(value) => value ? formatCurrency(Number(Array.isArray(value) ? value[0] : value)) : ''}
                 contentStyle={{
                   backgroundColor: "#0f172a",
                   border: "1px solid #334155",
