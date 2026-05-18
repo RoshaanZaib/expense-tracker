@@ -193,6 +193,7 @@ export default function DashboardPage() {
       })
       setShowExpenseForm(false)
       setFeedbackMessage({ type: "success", text: "Expense added successfully." })
+      setTimeout(() => setFeedbackMessage(null), 3000)
     } catch {
       setFeedbackMessage({ type: "error", text: "Failed to add expense." })
       throw new Error("add_failed")
@@ -249,41 +250,61 @@ export default function DashboardPage() {
   }
 
   const handleDeleteExpense = async (expenseId: string) => {
-    try {
-      await deleteDoc(doc(db, "expenses", expenseId))
-      setFeedbackMessage({ type: "success", text: "Expense deleted successfully." })
-    } catch {
-      setFeedbackMessage({ type: "error", text: "Failed to delete expense." })
-    }
+  try {
+    await deleteDoc(doc(db, "expenses", expenseId))
+    setFeedbackMessage({ type: "success", text: "Expense deleted successfully." })
+    setTimeout(() => setFeedbackMessage(null), 3000)
+  } catch {
+    setFeedbackMessage({ type: "error", text: "Failed to delete expense." })
+    setTimeout(() => setFeedbackMessage(null), 3000)
   }
+}
 
   return (
     <ProtectedRoute>
       <DashboardLayout>
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h1 className="text-2xl font-bold tracking-tight text-white lg:text-3xl">
-              Dashboard
-            </h1>
-            <p className="mt-1 text-sm text-slate-400 lg:text-base">
-              Track income, expenses, and your balance in real time.
-            </p>
+            <h1 style={{ fontSize: "28px", fontWeight: "700", color: "#111827", margin: 0 }}>
+  Dashboard
+</h1>
+<p style={{ fontSize: "14px", color: "#6b7280", marginTop: "4px" }}>
+  Track income, expenses, and your balance in real time.
+</p>
           </div>
           <div className="flex items-center gap-2">
             <button
-              type="button"
-              onClick={() => setShowIncomeForm((prev) => !prev)}
-              className="rounded-lg border border-emerald-600/40 bg-emerald-500/10 px-3 py-2 text-sm font-medium text-emerald-300 hover:bg-emerald-500/20"
-            >
-              {showIncomeForm ? "Close Income Form" : "Add Income"}
-            </button>
-            <button
-              type="button"
-              onClick={() => setShowExpenseForm((prev) => !prev)}
-              className="rounded-lg border border-cyan-600/40 bg-cyan-500/10 px-3 py-2 text-sm font-medium text-cyan-300 hover:bg-cyan-500/20"
-            >
-              {showExpenseForm ? "Close Expense Form" : "Add Expense"}
-            </button>
+  type="button"
+  onClick={() => setShowIncomeForm((prev) => !prev)}
+  style={{
+    padding: "10px 20px",
+    borderRadius: "12px",
+    border: "none",
+    background: "#16a34a",
+    color: "#ffffff",
+    fontSize: "14px",
+    fontWeight: "600",
+    cursor: "pointer",
+  }}
+>
+  {showIncomeForm ? "Close" : "Add Income"}
+</button>
+<button
+  type="button"
+  onClick={() => setShowExpenseForm((prev) => !prev)}
+  style={{
+    padding: "10px 20px",
+    borderRadius: "12px",
+    border: "none",
+    background: "linear-gradient(90deg, #7c3aed, #4f46e5)",
+    color: "#ffffff",
+    fontSize: "14px",
+    fontWeight: "600",
+    cursor: "pointer",
+  }}
+>
+  {showExpenseForm ? "Close" : "Add Expense"}
+</button>
           </div>
         </div>
 
@@ -330,11 +351,49 @@ export default function DashboardPage() {
           />
         ) : null}
 
-        <SummaryCards
-          totalIncome={totalIncome}
-          totalExpenses={totalExpenses}
-          loading={isExpensesLoading}
-        />
+        {!isExpensesLoading && totalExpenses > totalIncome && (
+  <div style={{
+    background: "#fef2f2",
+    border: "1px solid #fecaca",
+    borderRadius: "14px",
+    padding: "14px 20px",
+    display: "flex",
+    alignItems: "center",
+    gap: "12px",
+  }}>
+    <div style={{
+      width: "36px",
+      height: "36px",
+      borderRadius: "50%",
+      background: "#fee2e2",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      flexShrink: 0,
+    }}>
+      <svg width="20" height="20" fill="none" stroke="#dc2626" strokeWidth="2" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+      </svg>
+    </div>
+    <div>
+      <p style={{ fontSize: "14px", fontWeight: "600", color: "#dc2626", margin: 0 }}>
+        Overspending Warning!
+      </p>
+      <p style={{ fontSize: "13px", color: "#ef4444", margin: "2px 0 0" }}>
+        Your expenses exceed your income by{" "}
+        <strong>
+          {new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(totalExpenses - totalIncome)}
+        </strong>
+      </p>
+    </div>
+  </div>
+)}
+
+<SummaryCards
+  totalIncome={totalIncome}
+  totalExpenses={totalExpenses}
+  loading={isExpensesLoading}
+/>
 
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
           <ExpenseBarChart expenses={expenses} loading={isExpensesLoading} />

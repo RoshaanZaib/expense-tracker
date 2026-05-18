@@ -1,39 +1,108 @@
-type SummaryCardsProps = {
-  totalIncome: number;
-  totalExpenses: number;
-  loading?: boolean;
-};
+"use client"
 
-const formatCurrency = (value: number) =>
-  new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(value);
+type SummaryCardsProps = {
+  totalIncome: number
+  totalExpenses: number
+  loading?: boolean
+}
+
+const fmt = (value: number) =>
+  new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(value)
 
 export function SummaryCards({ totalIncome, totalExpenses, loading = false }: SummaryCardsProps) {
-  const balance = totalIncome - totalExpenses;
+  const balance = totalIncome - totalExpenses
 
-  const cardItems = [
-    { label: "Total Income", value: formatCurrency(totalIncome), accent: "text-emerald-400" },
+  const cards = [
+    {
+      label: "Total Income",
+      value: fmt(totalIncome),
+      icon: (
+        <svg width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
+        </svg>
+      ),
+      iconBg: "#dcfce7",
+      iconColor: "#16a34a",
+      valueColor: "#16a34a",
+      border: "#bbf7d0",
+    },
     {
       label: "Total Expenses",
-      value: formatCurrency(totalExpenses),
-      accent: "text-rose-400",
+      value: fmt(totalExpenses),
+      icon: (
+        <svg width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M20 12H4" />
+        </svg>
+      ),
+      iconBg: "#fee2e2",
+      iconColor: "#dc2626",
+      valueColor: "#dc2626",
+      border: "#fecaca",
     },
-    { label: "Balance", value: formatCurrency(balance), accent: "text-cyan-400" },
-  ];
+    {
+      label: "Balance",
+      value: fmt(balance),
+      icon: (
+        <svg width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3" />
+        </svg>
+      ),
+      iconBg: "#ede9fe",
+      iconColor: "#7c3aed",
+      valueColor: "#7c3aed",
+      border: "#ddd6fe",
+    },
+  ]
 
   return (
-    <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      {cardItems.map((item) => (
-        <article
-          key={item.label}
-          className="rounded-xl border border-slate-800 bg-slate-900/70 p-5 shadow-lg shadow-slate-950/40 transition hover:-translate-y-0.5 hover:border-slate-700"
+    <div style={{
+      display: "grid",
+      gridTemplateColumns: "repeat(3, 1fr)",
+      gap: "20px",
+    }}>
+      {cards.map((card) => (
+        <div
+          key={card.label}
+          style={{
+            background: "#ffffff",
+            borderRadius: "16px",
+            padding: "24px",
+            border: `1px solid ${card.border}`,
+            display: "flex",
+            flexDirection: "column",
+            gap: "16px",
+          }}
         >
-          <p className="text-sm text-slate-400">{item.label}</p>
-          <p className={`mt-2 text-2xl font-semibold ${item.accent}`}>
-            {loading ? "Loading..." : item.value}
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+            <p style={{ fontSize: "14px", color: "#6b7280", margin: 0, fontWeight: "500" }}>
+              {card.label}
+            </p>
+            <div style={{
+              width: "40px",
+              height: "40px",
+              borderRadius: "10px",
+              background: card.iconBg,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              color: card.iconColor,
+            }}>
+              {card.icon}
+            </div>
+          </div>
+          <p style={{
+            fontSize: "28px",
+            fontWeight: "700",
+            color: loading ? "#d1d5db" : card.valueColor,
+            margin: 0,
+          }}>
+            {loading ? "$-.--" : card.value}
           </p>
-          <p className="mt-1 text-xs text-slate-500">Updated just now</p>
-        </article>
+          <p style={{ fontSize: "12px", color: "#9ca3af", margin: 0 }}>
+            Updated just now
+          </p>
+        </div>
       ))}
-    </section>
-  );
+    </div>
+  )
 }
