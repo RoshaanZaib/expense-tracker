@@ -44,7 +44,7 @@ function LoginForm() {
     <div className="w-full max-w-sm mx-auto">
       <div className="text-center mb-8">
         <h1 style={{ fontSize: "38px", fontWeight: "600", color: "#ffffff", letterSpacing: "-0.5px" }}>
-          SpendorAI
+          Spendorai
         </h1>
         <p style={{ color: "rgba(255,255,255,0.75)", fontSize: "14px", marginTop: "6px" }}>
           Track your expenses smartly
